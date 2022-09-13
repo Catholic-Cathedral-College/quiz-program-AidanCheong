@@ -1,41 +1,65 @@
 from sys import exit
-import click,time
+import click,time,random
+from random import seed
+from random import randint
+
 
 
 def loading():
-  run = 0
-  while run != 2:
-    print("Loading")
-    time.sleep(1)
-    click.clear()
-    print("Loading.")
-    time.sleep(1)
-    click.clear()
-    print("Loading..")
-    time.sleep(1)
-    click.clear()
-    print("Loading...")
-    time.sleep(1)
-    click.clear()
-    run = run + 1
-  else:
-    print("Game Ready!!") 
-    time.sleep(2)
-    click.clear()
-    print("Link")
-    time.sleep(0.5)
-    click.clear()
-    print("Link.")
-    time.sleep(0.5)
-    click.clear()
-    print("Link..")
-    time.sleep(0.5)
-    click.clear()
-    print("Link...")
-    time.sleep(0.5)
-    click.clear()
-    print("Link... Start!!")
-    
+  print("     Loading")
+  print("⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛")
+  time.sleep(0.9)
+  click.clear()
+  print("     Loading")
+  print("⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛")
+  time.sleep(1.2)
+  click.clear()
+  print("     Loading")
+  print("⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛")
+  time.sleep(1)
+  click.clear()
+  print("     Loading")
+  print("⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛")
+  time.sleep(1.1)
+  click.clear()
+  print("     Loading")
+  print("⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛")
+  time.sleep(0.5)
+  click.clear()
+  print("     Loading")
+  print("⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛")
+  time.sleep(0.8)
+  click.clear()
+  print("     Loading")
+  print("⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛")
+  time.sleep(1.3)
+  click.clear()
+  print("     Loading")
+  print("⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛")
+  time.sleep(1.1)
+  click.clear()
+  print("     Loading")
+  print("⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛")
+  time.sleep(1.2)
+  click.clear()
+  print("    Game Ready!!")
+  print("⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜")
+  time.sleep(2)
+  click.clear()
+  print("Link")
+  time.sleep(0.5)
+  click.clear()
+  print("Link.")
+  time.sleep(0.5)
+  click.clear()
+  print("Link..")
+  time.sleep(0.5)
+  click.clear()
+  print("Link...")
+  time.sleep(0.5)
+  click.clear()
+  print("Link... Start!!")
+  
     
 
 
@@ -196,9 +220,14 @@ def main():
           print("The correct answer is", answer,".")
          #This adds one to variable loopamt 
           loopamt = loopamt + 1
-          print("You have", 20 - loopamt, "questions to go!")
-          time.sleep(2)
-          click.clear()
+          if loopamt != 1:
+            print("You have", 20 - loopamt, "questions to go!")
+            time.sleep(2)
+            click.clear()
+          elif loopamt == 1:
+            print("You have", 20 - loopamt, "question left!")
+            time.sleep(2)
+            click.clear()
         #Since everything except the correct answer is wrong, the else statement states that for every other answer, print 'incorrect'. 
         else:
           print("Incorrect...")
@@ -208,9 +237,14 @@ def main():
           print("Lives =", lives)
           #No matter if the answer was right or wrong, the amount of times it has looped through must keep going up as each question progresses.
           loopamt = loopamt + 1
-          print("You have", 20 - loopamt, "questions to go!")
-          time.sleep(2)
-          click.clear()
+          if loopamt != 1:
+            print("You have", 20 - loopamt, "questions to go!")
+            time.sleep(2)
+            click.clear()
+          elif loopamt == 1:
+            print("You have", 20 - loopamt, "question left!")
+            time.sleep(2)
+            click.clear()
           #This if statement says that if lives is equal to or less than 0, do something.
           if lives <= 0:
             #This gives the 'Game over' message based on whether the if statement's condition was fulfilled. In this case, its when lives becomes less than or equal to 0.
