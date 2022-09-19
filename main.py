@@ -1,46 +1,47 @@
 from sys import exit
-import click,time,random
-from random import seed
-from random import randint
+import click,time
 
-
-
+#prints a loading screen
 def loading():
-  print("     Loading")
+  print("     Loading.")
+  #prints "Loading"
   print("⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛")
-  time.sleep(0.9)
+  #prints a loading bar
+  time.sleep(1)
+  #this command sets the interval between the previous command and the one after it
   click.clear()
-  print("     Loading")
+  #this clears everything on the console
+  print("     Loading..")
   print("⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛")
-  time.sleep(1.2)
+  time.sleep(1)
   click.clear()
-  print("     Loading")
+  print("     Loading...")
   print("⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛")
   time.sleep(1)
   click.clear()
-  print("     Loading")
+  print("     Loading.")
   print("⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛")
-  time.sleep(1.1)
+  time.sleep(1)
   click.clear()
-  print("     Loading")
+  print("     Loading..")
   print("⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛")
-  time.sleep(0.5)
+  time.sleep(1)
   click.clear()
-  print("     Loading")
+  print("     Loading...")
   print("⬜⬜⬜⬜⬜⬜⬛⬛⬛⬛")
-  time.sleep(0.8)
+  time.sleep(1)
   click.clear()
-  print("     Loading")
+  print("     Loading.")
   print("⬜⬜⬜⬜⬜⬜⬜⬛⬛⬛")
-  time.sleep(1.3)
+  time.sleep(1)
   click.clear()
-  print("     Loading")
+  print("     Loading..")
   print("⬜⬜⬜⬜⬜⬜⬜⬜⬛⬛")
-  time.sleep(1.1)
+  time.sleep(1)
   click.clear()
-  print("     Loading")
+  print("     Loading...")
   print("⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛")
-  time.sleep(1.2)
+  time.sleep(1)
   click.clear()
   print("    Game Ready!!")
   print("⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜")
@@ -73,16 +74,16 @@ def main():
   #This sets the variable 'loopamt' to 0 to begin- this variable keeps track of the amount of times it has looped through.
   loopamt = 0
    #This prints out the welcome message and the user instructions.  
-  print("Konichiwa, welcome to an anime themed quiz ~UwU~ \nIf you get 10/20 questions wrong, you fail the quiz. If you get over 10 questions right, you pass the quiz. \nIf you get all 20 questions right, there is a special reward!!! \nTo answer each question, please input the letter (a, b, c, d) associated with the answer you have selected.")
+  print("Konichiwa, welcome to an anime themed quiz ~UwU~ \nIf you get 10/20 questions wrong, you fail the quiz. If you get over 10 questions right, you pass the quiz. \nIf you get all 20 questions right, there is a special reward!!! (Being vored by Raul the Fat Hispanic) \nTo answer each question, please input the letter (a, b, c, d) associated with the answer you have selected.")
     #Variable 'begin' equals the user input answer to the printed question.
     
     
   begin = input("Do you wish to play this quiz? Please answer with either 'yes' or 'no'. ")
   while begin.lower() != ("yes"):
-    begin = input("There was an error. Rebooting...\nDo you wish to play this quiz? Please answer with either 'yes' or 'no'. ")
     if begin.lower() == ("no"):  
       print("Sayonara, have a good day.")
       exit(0)
+  begin = input("There was an error. Rebooting...\nDo you wish to play this quiz? Please answer with either 'yes' or 'no'. ")
    
       
       
@@ -91,6 +92,8 @@ def main():
   #This if statement defines what happens when the user inputs 'yes'.
   
   print("Hai, let's begin!!")
+  time.sleep(2)
+  click.clear()
   #This is the dictionary name and the primary dictionary opener.
   quiz_questions = {
     #This is the question name and the secondary dictionary opener.
