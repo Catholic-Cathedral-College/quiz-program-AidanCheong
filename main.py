@@ -1,5 +1,8 @@
 from sys import exit
 import click,time
+import sqlite3
+
+DATABASE = "quiz-questions.db"
 
 #prints a loading screen
 def loading():
@@ -65,7 +68,13 @@ def loading():
 
 
 def main():
-  loading()
+  global DATABASE
+  #loading()
+  db = sqlite3.connect(DATABASE)
+  cursor = db.cursor()
+  sql = "SELECT * FROM questions;"
+  cursor.execute(sql)
+  results = cursor.fetchall()
  
     #This sets the variable 'score' to 0 to begin- this variable keeps track of your score.
   score = 0
@@ -78,12 +87,13 @@ def main():
     #Variable 'begin' equals the user input answer to the printed question.
     
     
-  begin = input("Do you wish to play this quiz? Please answer with either 'yes' or 'no'. ")
-  while begin.lower() != ("yes"):
-    if begin.lower() == ("no"):  
+  begin = input("Do you wish to play this quiz? Please answer with either 'yes' or 'no'. ").lower().strip()
+  while begin != ("yes"):
+    if begin == ("no"):  
       print("Sayonara, have a good day.")
       exit(0)
-  begin = input("There was an error. Rebooting...\nDo you wish to play this quiz? Please answer with either 'yes' or 'no'. ")
+    begin = input("There was an error. Rebooting...\nDo you wish to play this quiz? Please answer with either 'yes' or 'no'. ")
+  
    
       
       
@@ -209,10 +219,12 @@ def main():
       break
     elif lives <= 0:
       break
-    for _ , question in quiz_questions.items():
+    for question in results:
         #This prints the question for the user to answer.
-        print(question.get("question"))
-        answer = input(question.get("ans"))
+        print(question[1])
+        for i in range(2, 6):
+          print(question[i], end= " ")
+        answer = input()
         #This if statement states that if variable 'answer' in full lowercase is equal to the 'cor' of the question then print 'Correct'.
         if answer.lower() == question.get("cor"):
           print("Correct!")
@@ -295,7 +307,6 @@ def main():
         print("How is this possible??? *Special Reward Unlocked!!*")
         print("Weeb Level- 😈😳😨🤩 S♥E♥N♥P♥A♥I♥ ♥O♥T♥A♥K♥U🤩😨😳😈")
         print("✨Special Reward✨ - https://www.youtube.com/watch?v=xvFZjo5PgG0 \n")    
-  #This 'else' covers everything else apart from the answers 'yes' and 'no' as defined in lines 12 and 15.
     print("Game Over, press stop to stop the programme and press run to re-try.")
 
 main()
