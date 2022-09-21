@@ -2,7 +2,7 @@ from sys import exit
 import click,time
 import sqlite3
 
-DATABASE = "quiz-questions.db"
+DATABASE = "quizquestions.db"
 
 #prints a loading screen
 def loading():
@@ -65,7 +65,27 @@ def loading():
   print("Link... Start!!")
   
     
-
+def admin_mode():
+  print("Welcome to Admin Mode. Please enter your username and your password. ")
+  username = input("Username:")
+  password = input("Password:")
+  if username == ("AidanC"):
+    if password == ("lachlanisasimp"):
+      print("Admin Mode has been unlocked.")
+      time.sleep(1)
+      print("What would you like to do today?")
+      admin_choices = int(input("1. Delete Questions \n2. Add Questions \n3. Exit Admin Mode"))
+      if admin_choices == 1:
+        print("You are now going to: Delete Questions.")
+      elif admin_choices == 2:
+        print("You are now going to: Add Questions")
+        
+      elif admin_choices == 3:
+        print("You are exitting Admin Mode.")
+        return "yes"
+        
+   
+  
 
 def main():
   global DATABASE
@@ -92,7 +112,10 @@ def main():
     if begin == ("no"):  
       print("Sayonara, have a good day.")
       exit(0)
-    begin = input("There was an error. Rebooting...\nDo you wish to play this quiz? Please answer with either 'yes' or 'no'. ")
+    elif begin == ("admin"):
+      begin = admin_mode()
+    else:
+      begin = input("There was an error. Rebooting...\nDo you wish to play this quiz? Please answer with either 'yes' or 'no'. ")
   
    
       
@@ -104,116 +127,6 @@ def main():
   print("Hai, let's begin!!")
   time.sleep(2)
   click.clear()
-  #This is the dictionary name and the primary dictionary opener.
-  quiz_questions = {
-    #This is the question name and the secondary dictionary opener.
-    "question_1": {
-      #This is a question variable, and it is defined by the text after the colon.
-      "question": "Who is the main protagonist in the popular anime Demon Slayer?",
-      #These are the answers that the user will have to choose from - variable 'ans' is defined by what's on the right of the colon.
-      "ans": ["a.Nezuko Kamado", "b.Tanjiro Kamado", "c.Zenitsu Agatsuma", "d.Inosuke Hashibira"],
-      #This is the correct answer for the question.
-      "cor": "b"
-   #This closes the secondary dictionary opener.
-    },
-    "question_2" : {
-      "question": "What Tailed Beast does Naruto have in the anime Naruto?",
-      "ans" : ["a.Nine Tails", "b.Ten Tails", "c.Eight Tails", "d.One Tail"],
-      "cor" : "a"
-    },
-    "question_3" : {
-      "question" : "What is Anya's power in Spy X Family?",
-      "ans" : ["a.Telepathy", "b.Super Strength", "c.Teleportation", "d.Mind Reading"],
-      "cor" : "d"
-    },
-    "question_4" : {
-      "question" : "Which One Piece villain ate the Chop Fruit?",
-    "ans" : ["a.Croc", "b.Buggy", "c.Don Kreig", "d.Arlong"],
-    "cor" : "b"
-    },
-    "question_5" : {
-      "question" : "Which Hunter X Hunter character is the only survivor of the Kurta Clan?",
-    "ans" : ["a.Leorio", "b.Gon", "c.Kurapika", "d.Killua"],
-    "cor" : "c"
-    },
-    "question_6" : {
-      "question" : "In Haikyuu!, which school does Karasuno have a long standing rivalry with?",
-    "ans" : ["a.Aoba Johsai", "b.Nekoma", "c.Fukurodani", "d.Itachiyama"],
-    "cor" : "b"
-    },
-    "question_7" : {
-      "question" : "Which Initial D: First Stage character drives a red Honda Civic?",
-    "ans" : ["a.Takumi Fujiwara", "b.Shingou Shoji", "c.Natsuki Mogi", "d.Mako Sato"],
-    "cor" : "b"
-    },
-    "question_8" : {
-      "question" : "Which one of these is Yuji Itadori's power in Jujutsu Kaisen?",
-    "ans" : ["a.Black Flash", "b.Infinity", "c.Dismantle", "d.Ratio"],
-    "cor" : "a"
-    },
-    "question_9" : {
-      "question" : "Which Food Wars character specialises in the cooking and handling of expensive meats?",
-    "ans" : ["a.Ikumi Mito", "b.Satoshi Ikkishi", "c.Erina Nakiri", "d.Yukihira Soma"],
-    "cor" : "a"
-    },
-    "question_10" : {
-      "question" : "Which season of Shingeki no Kyojin uses 'Shinzo Wa Sasageyo' as it's opening?",
-    "ans" : ["a.Season 1", "b.Season 2", "c.Season 3", "d.Season 4"],
-    "cor" : "b"
-    },
-    "question_11" : {
-      "question" : "What was the name of the gym that Brock leads in the anime Pokemon?",
-    "ans" : ["a.Golden Gym", "b.Carbon Gym", "c.Pewter Gym", "d.Telekinesis Gym"],
-    "cor" : "c"
-    },
-    "question_12" : {
-      "question" : "Which Boku no Hero Academia character uses the quirk 'Hellflame'?",
-    "ans" : ["a.Deku", "b.Gravity Girl", "c.Endeavour", "d.Red Riot"],
-    "cor" : "c"
-    },
-    "question_13" : {
-      "question" : "In Assassination Classroom, who used a giant pudding in an attempt to kill Koro Sensei?",
-    "ans" : ["a.Nagisa Shiota", "b.Karma Akabane", "c.Kaede Kayano", "d.Itona Horibe"],
-    "cor" : "c"
-    },
-    "question_14" : {
-      "question" : "In Sword Art Online, what was Kirito's cousin, Suguha's in-game username in Alfheim Online?",
-    "ans" : ["a.Leafa", "b.Nyanda", "c.Mizushi", "d.Tenri"],
-    "cor" : "a"
-    },
-    "question_15" : {
-      "question" : "In Violet Evergarden, how fast can Violet type in characters per second?",
-    "ans" : ["a.300", "b.200", "c.100", "d.50"],
-    "cor" : "b"
-    },
-    "question_16" : {
-      "question" : "In Re-Zero, what magic type does Subaru use?",
-    "ans" : ["a.Yang", "b.Ice", "c.Water", "d.Yin"],
-    "cor" : "d"
-    },
-    "question_17" : {
-      "question" : "In Ao Ashi, what soccer position does star player Haruhisa Kuribayashi play? ",
-    "ans" : ["a.Full Back", "b.Midfielder", "c.Left Striker", "d.Centre Defense"],
-    "cor" : "b"
-    },
-     "question_18" : {
-      "question" : "In Darling In the Franxx, what was Hiro's code number? ",
-    "ans" : ["a.001", "b.007", "c.012", "d.016"],
-    "cor" : "d"
-    },
-     "question_19" : {
-      "question" : "In Black Clover, what grimoire did the Wizard King Julius Novachrono possess?",
-    "ans" : ["a.Time", "b.Gravity", "c.Nuclear", "d.Particle"],
-    "cor" : "a"
-    },
-     "question_20" : {
-      "question" : "In Classroom of the Elite: Season 2, what group is Ayanokoji placed in during a special test on board the cruise ship?",
-    "ans" : ["a.Saturn", "b.Neptune", "c.Mars", "d.Mercury"],
-    "cor" : "c"
-    },
-    
-    #This closes the primary dictionary.
-  }
   while lives >= 0:
     if loopamt >= 20:
       break
@@ -222,27 +135,22 @@ def main():
     for question in results:
         #This prints the question for the user to answer.
         print(question[1])
-        for i in range(2, 6):
-          print(question[i], end= " ")
+        for i in range(3, 7):
+          print("[", question[i], "]", end= " ")
         answer = input()
         #This if statement states that if variable 'answer' in full lowercase is equal to the 'cor' of the question then print 'Correct'.
-        if answer.lower() == question.get("cor"):
+        if answer.lower() == question[2]:
           print("Correct!")
           #This adds 1 to the variable named score.
           score = score + 1
           print("Score =", score)
           print("Lives =", lives)
-          print("The correct answer is", answer,".")
+          print("The correct answer is", answer)
          #This adds one to variable loopamt 
           loopamt = loopamt + 1
-          if loopamt != 1:
-            print("You have", 20 - loopamt, "questions to go!")
-            time.sleep(2)
-            click.clear()
-          elif loopamt == 1:
-            print("You have", 20 - loopamt, "question left!")
-            time.sleep(2)
-            click.clear()
+          print("You have", 20 - loopamt, "questions to go!")
+          time.sleep(2)
+          click.clear()
         #Since everything except the correct answer is wrong, the else statement states that for every other answer, print 'incorrect'. 
         else:
           print("Incorrect...")
