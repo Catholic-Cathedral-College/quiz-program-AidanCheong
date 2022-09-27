@@ -63,6 +63,30 @@ def loading():
   time.sleep(0.5)
   click.clear()
   print("Link... Start!!")
+
+
+def delete_questions(QID):
+  db = sqlite3.connect(DATABASE)
+  cursor = db.cursor()
+  sql = "DELETE FROM questions WHERE QID = ?"
+  cursor.execute(sql, (QID,))
+  db.commit()
+  db.close()
+def add_questions():
+  db = sqlite3.connect(DATABASE)
+  cursor = db.cursor()
+
+  db.commit()
+  db.close()
+
+def update_questions():
+  db = sqlite3.connect(DATABASE)
+  cursor = db.cursor()
+
+  db.commit()
+  db.close()
+
+
   
     
 def admin_mode():
@@ -77,10 +101,15 @@ def admin_mode():
       admin_choices = int(input("1. Delete Questions \n2. Add Questions \n3. Exit Admin Mode"))
       if admin_choices == 1:
         print("You are now going to: Delete Questions.")
+        QID = int(input("What is the number ID of the question you would like to delete?"))
+        delete_questions(QID)
+        print
       elif admin_choices == 2:
         print("You are now going to: Add Questions")
-        
       elif admin_choices == 3:
+        print("You are now going to: Update Questions")
+        
+      elif admin_choices == 4:
         print("You are exitting Admin Mode.")
         return "yes"
         
@@ -217,6 +246,7 @@ def main():
         print("✨Special Reward✨ - https://www.youtube.com/watch?v=xvFZjo5PgG0 \n")    
     print("Game Over, press stop to stop the programme and press run to re-try.")
 
+  db.close()
 main()
 
 
