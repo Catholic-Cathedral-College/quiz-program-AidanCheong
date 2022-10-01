@@ -2,7 +2,7 @@ from sys import exit
 import click,time
 import sqlite3
 
-DATABASE = "quizquestions.db"
+DATABASE = "quizquestionsoriginal.db"
 
 #prints a loading screen
 def loading():
@@ -65,6 +65,18 @@ def loading():
   print("Link... Start!!")
 
 
+
+  
+def print_questions():
+  db = sqlite3.connect(DATABASE)
+  cursor = db.cursor()
+  sql = "SELECT * FROM questions"
+  cursor.execute(sql)
+  results = cursor.fetchall()
+  return results
+  db.close()
+
+#This is working
 def delete_questions(QID):
   db = sqlite3.connect(DATABASE)
   cursor = db.cursor()
@@ -72,23 +84,25 @@ def delete_questions(QID):
   cursor.execute(sql, (QID,))
   db.commit()
   db.close()
-def add_questions():
+
+#This is working
+def add_questions(question, correctanswer, option1, option2, option3, option4):
   db = sqlite3.connect(DATABASE)
   cursor = db.cursor()
-
+  sql = "INSERT INTO questions (question, correctanswer, option1, option2, option3, option4) VALUES (?, ?, ?, ?, ?, ?)"
+  cursor.execute(sql, (question, correctanswer, option1, option2, option3, option4))
   db.commit()
   db.close()
 
-def update_questions():
+#This will likely work when you set it up
+def update_questions(question, correctanswer, option1, option2, option3, option4, QID):
   db = sqlite3.connect(DATABASE)
   cursor = db.cursor()
-
+  sql = "UPDATE questions SET question = ?, correctanswer, = ?, option1 = ?, option2 = ?, option3 = ?, option4 = ? WHERE QID = ?"
+  cursor.execute(sql, (question, correctanswer, option1, option2, option3, option4, QID))
   db.commit()
   db.close()
 
-
-  
-    
 def admin_mode():
   print("Welcome to Admin Mode. Please enter your username and your password. ")
   username = input("Username:")
@@ -97,25 +111,45 @@ def admin_mode():
     if password == ("lachlanisasimp"):
       print("Admin Mode has been unlocked.")
       time.sleep(1)
+      #So you don't get the error message, I would loop this set of code - while admin_choices != 4
+     
       print("What would you like to do today?")
-      admin_choices = int(input("1. Delete Questions \n2. Add Questions \n3. Exit Admin Mode"))
-      if admin_choices == 1:
-        print("You are now going to: Delete Questions.")
-        QID = int(input("What is the number ID of the question you would like to delete?"))
-        delete_questions(QID)
-        print
-      elif admin_choices == 2:
-        print("You are now going to: Add Questions")
-      elif admin_choices == 3:
-        print("You are now going to: Update Questions")
-        
-      elif admin_choices == 4:
-        print("You are exitting Admin Mode.")
-        return "yes"
+      admin_choices = int(input("1. Delete Questions \n2. Add Questions \n3. Update Questions \n4. Print Questions \n5. Exit Admin Mode \n"))
+      while admin_choices != 5:
+        if admin_choices == 1:
+          print("You are now going to: Delete Questions.")
+          QID = int(input("What is the number ID of the question you would like to delete?"))
+          delete_questions(QID)
+          
+        elif admin_choices == 2:
+          print("You are now going to: Add Questions")
+          question = input("What is the question you would like to add?")
+          correctanswer = input("What is the correct answer for your question?")
+          option1 = input("What is your first answer option?")
+          option2 = input("What is your second answer option?")
+          option3 = input("what is your third answer option?")
+          option4 = input("What is your last answer option?")
+          add_questions(question, correctanswer, option1, option2, option3, option4)
+          #This was testing that the database was being changed - it is
+          results = print_questions()
+          for result in results:
+            print(result)
+        elif admin_choices == 3:
+          print("You are now going to: Update Questions")
+        elif admin_choices == 4: 
+          print_questions()
+        elif admin_choices == 5:
+          print("You are exitting Admin Mode.")
+          return "yes"
+        else:
+          print("There are only 5 choices, please select from 1 to 5.")
+        admin_choices = int(input("1. Delete Questions \n2. Add Questions \n3. Update Questions \n5. Exit Admin Mode \n"))
         
    
-  
+#When you are back on your laptop, I would recommend including a file that is the original 20 questions as a db file - name it something like dbsetup.db
+#This way I can run your assessment using the setup file first to see all 20 questions you started with, but it won't actually be modified by your admin mode like quizquestions.db does
 
+#this opens the main function where the main part of my quiz is stored
 def main():
   global DATABASE
   #loading()
@@ -180,6 +214,7 @@ def main():
           print("You have", 20 - loopamt, "questions to go!")
           time.sleep(2)
           click.clear()
+          
         #Since everything except the correct answer is wrong, the else statement states that for every other answer, print 'incorrect'. 
         else:
           print("Incorrect...")
@@ -209,7 +244,9 @@ def main():
     if loopamt == 20:
       print("Your final score is", score, "!")
       print("Congradulations on passing the quiz!!!")
+      #Since there are 20 questions
       print("Your correct answer percentage is", score*5,"%")
+      #This prints the answer key.
       print("The answer key is... \n 1)b.Tanjiro Kamado \n 2)a.Nine Tails \n 3)d.Mind Reading \n 4)b.Buggy \n 5)c.Kurapika \n 6)b.Nekoma \n 7)b.Shingou Shoji \n 8)a.Black Flash \n 9)a.Ikumi Mito \n 10)b.Season 2 \n 11)c.Pewter Gym \n 12)c.Endeavour \n 13)c.Kaede Kayano \n 14)a.Leafa \n 15)b.200 \n 16)d.Yin \n 17)b.Midfielder \n 18)d.016 \n 19)a.Time \n 20)c.Mars")
       #These print a short message and a 'Weeb Level' based on your score.
       if score == 11:
