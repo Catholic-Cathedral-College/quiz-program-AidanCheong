@@ -1,8 +1,12 @@
+#this imports exit from sys
 from sys import exit
+#this imports click and time for the loading bar
 import click,time
+#this imports sqlite 3
 import sqlite3
 
-DATABASE = "adminmodetesting.db"
+#this sets the database
+DATABASE = "dbsetup(original).db"
 
 #prints a loading screen
 def loading():
@@ -64,74 +68,69 @@ def loading():
   click.clear()
   print("Link... Start!!")
 
-
-
-  
-def print_questions():
-  db = sqlite3.connect(DATABASE)
-  cursor = db.cursor()
-  sql = "SELECT * FROM questions"
-  cursor.execute(sql)
-  results = cursor.fetchall()
-  return results
-  print(results)
-  db.close()
-
-#This is working
+#this deletes a question
+#this creates the function delete_questions and recieves the variable QID
 def delete_questions(QID):
+  #this connects to the database
   db = sqlite3.connect(DATABASE)
+  #this sets the cursor
   cursor = db.cursor()
+  #this deletes a row from a table where QID equals (userinput)
   sql = "DELETE FROM questions WHERE QID = ?"
+  #this executes the cursor
   cursor.execute(sql, (QID,))
+  #this commits the changes to the database
   db.commit()
+  #this closes the database
   db.close()
 
-#This is working
+#This adds questions
 def add_questions(question, correctanswer, option1, option2, option3, option4, difficulty):
   db = sqlite3.connect(DATABASE)
   cursor = db.cursor()
+  #this inserts intp the table a question and sets the correct answer and all the options
   sql = "INSERT INTO questions (question, correctanswer, option1, option2, option3, option4, difficulty) VALUES (?, ?, ?, ?, ?, ?, ?)"
   cursor.execute(sql, (question, correctanswer, option1, option2, option3, option4, difficulty))
   db.commit()
   db.close()
 
-#This will likely work when you set it up
+#This updates questions
 def update_questions(question, correctanswer, option1, option2, option3, option4, difficulty, QID):
   db = sqlite3.connect(DATABASE)
   cursor = db.cursor()
+  #this updates questions- the correct answer, the options and the difficulty where the QID is equal to something.
   sql = "UPDATE questions SET question = ?, correctanswer = ?, option1 = ?, option2 = ?, option3 = ?, option4 = ?, difficulty = ?, WHERE QID = ?"
   cursor.execute(sql,(question, correctanswer, option1, option2, option3, option4, difficulty, QID,))
   db.commit()
   db.close()
 
-def loop_count(level):
-  db = sqlite3.connect(DATABASE)
-  cursor = db.cursor()
-  sql = "SELECT COUNT(*) FROM questions WHERE difficulty = ?"
-  cursor.execute(sql,(level))
-  count = cursor.fetchall()
-  return count
-  db.close()
-
 def admin_mode():
   print("Welcome to Admin Mode. Please enter your username and your password. ")
+  #this asks for a specific username
   username = input("Username:")
+  #this asks for a specific password
   password = input("Password:")
+  #this sets the username
   if username == ("AidanC"):
+    #this sets the password
     if password == ("lachlanisasimp"):
       print("Admin Mode has been unlocked.")
+      #this waits an amount of time (in seconds) before performing the next action
       time.sleep(1)
      
      
       print("What would you like to do today?")
-      admin_choices = int(input("1. Delete Questions \n2. Add Questions \n3. Update Questions \n4. Print Questions \n5. Exit Admin Mode \n"))
-      while admin_choices != 5:
+      #this takes in input for the admin mode choices
+      admin_choices = int(input("1. Delete Questions \n2. Add Questions \n3. Update Questions \n4. Exit Admin Mode \n"))
+      while admin_choices != 4:
         if admin_choices == 1:
+          #this takes input for delete questions and the user can choose what they want to delete.
           print("You are now going to: Delete Questions.")
           QID = int(input("What is the number ID of the question you would like to delete?"))
           delete_questions(QID)
           
         elif admin_choices == 2:
+          #this takes input to add in a new question
           print("You are now going to: Add Questions")
           question = input("What is the question you would like to add?")
           correctanswer = input("What is the correct answer for your question?")
@@ -144,7 +143,9 @@ def admin_mode():
           #This was testing that the database was being changed - it is
           
         elif admin_choices == 3:
+          
           print("You are now going to: Update Questions")
+          #this takes input from the user to find out what they would like to change in a question
           question = input("What is the question you would like to update?")
           correctanswer = input("What is the correct answer for your question?")
           option1 = input("What is your first answer option?")
@@ -153,24 +154,23 @@ def admin_mode():
           option4 = input("What is your last answer option?")
           difficulty = input("What is your question's difficulty rating? \n e- Easy\n m- Medium\n h- Hard\n ex- Extreme\n")
           QID = int(input("What is the QID of your question?"))
+          #this sends the variable information to the function
           update_questions(question, correctanswer, option1, option2, option3, option4, difficulty, QID)
-        elif admin_choices == 4: 
-          print_questions()
-        elif admin_choices == 5:
+      
+        elif admin_choices == 4:
           print("You are exitting Admin Mode.")
           return "yes"
         else:
-          print("There are only 5 choices, please select from 1 to 5.")
-        admin_choices = int(input("1. Delete Questions \n2. Add Questions \n3. Update Questions \n4. Print Questions \n5. Exit Admin Mode \n"))
+          print("There are only 4 choices, please select from 1 to 4.")
+        admin_choices = int(input("1. Delete Questions \n2. Add Questions \n3. Update Questions \n4. Exit Admin Mode \n"))
         
    
-#When you are back on your laptop, I would recommend including a file that is the original 20 questions as a db file - name it something like dbsetup.db
-#This way I can run your assessment using the setup file first to see all 20 questions you started with, but it won't actually be modified by your admin mode like quizquestions.db does
+
 
 #this opens the main function where the main part of my quiz is stored
 def main():
   global DATABASE
-  #loading()
+  loading()
   db = sqlite3.connect(DATABASE)
   cursor = db.cursor()
  
@@ -190,6 +190,7 @@ def main():
     
     
   begin = input("Do you wish to play this quiz? Please answer with either 'yes' or 'no'. ").lower().strip()
+  #this loops the code so that if they get mis-spell or something they can retry.
   while begin != ("yes"):
     if begin == ("no"):  
       print("Sayonara, have a good day.")
@@ -198,7 +199,9 @@ def main():
       begin = admin_mode()
     else:
       begin = input("There was an error. Rebooting...\nDo you wish to play this quiz? Please answer with either 'yes' or 'no'. ")
+  #these allow the user to choose the level they wish to play at. Line 194 allows the user to give input.
   level = input("What level would you like to play at?\n 1. Easy\n 2. Medium\n 3. Hard\n 4. Extreme\n")
+  #this states that if level = 1 then it will select all questions from the database named questions where the difficulty column is 'e'. Same goes for the rest of them. If level = 2, all questions where difficulty = m is selected.
   if level == "1":
     sql = "SELECT * FROM questions WHERE difficulty = 'e';"
     cursor.execute(sql)
@@ -215,9 +218,7 @@ def main():
     sql = "SELECT * FROM questions WHERE difficulty = 'ex';"
     cursor.execute(sql)
     results = cursor.fetchall()
-    
-  loop_count(level)
-  print(loop_count(level))
+
   
 
   
@@ -230,14 +231,17 @@ def main():
       
       
  
-  
+  #prints the beginning message
   print("Hai, let's begin!!")
   time.sleep(2)
   click.clear()
+  #while lives is more than 0, the code can run- if not, the while loop will break.
   while lives >= 0:
     if loopamt >= 5:
+      #this breaks the while loop
       break
     elif lives <= 0:
+      #this also breaks the while loop
       break
     for question in results:
         #This prints the question for the user to answer.
@@ -269,11 +273,11 @@ def main():
           #No matter if the answer was right or wrong, the amount of times it has looped through must keep going up as each question progresses.
           loopamt = loopamt + 1
           if loopamt != 1:
-            print("You have", 20 - loopamt, "questions to go!")
+            print("You have", 5 - loopamt, "questions to go!")
             time.sleep(2)
             click.clear()
           elif loopamt == 1:
-            print("You have", 20 - loopamt, "question left!")
+            print("You have", 5 - loopamt, "question left!")
             time.sleep(2)
             click.clear()
           #This if statement says that if lives is equal to or less than 0, do something.
@@ -285,48 +289,26 @@ def main():
           #This breaks the 'for' loop.
           break
     #This if statement states that when the amount of times it has looped through equals 20, print the final score, congradulatory message, and the correct answe percentage.
-    if loopamt == 20:
+    if loopamt == 5:
       print("Your final score is", score, "!")
       print("Congradulations on passing the quiz!!!")
       #Since there are 20 questions
-      print("Your correct answer percentage is", score*5,"%")
+      print("Your correct answer percentage is", score*20,"%")
       
       #These print a short message and a 'Weeb Level' based on your score.
-      if score == 11:
-        print("Phew, you just passed the quiz.")
-        print("Weeb Level- 🌿ɢʀᴀꜱꜱ ᴛᴏᴜᴄʜᴇʀ🌿")
-      #Elif = 'else if'. So basically the language is saying 'else if the score equals to 12, print short message and weeb level'. Elif is used between an if statement and an else statement as an additional if statement.
-      elif score == 12:
-        print("Close, but you still made it!")
-        print("Weeb Level- 📱𝔜𝔬𝔲𝔗𝔲𝔟𝔢 𝔄𝔫𝔦𝔪𝔢 𝔚𝔞𝔱𝔠𝔥𝔢𝔯📱")
-      elif score == 13:
-        print("You have more animes to watch- what are you doing here?")
-        print("Weeb Level- 🎉Ⓟⓞⓟⓤⓛⓐⓡ Ⓐⓝⓘⓜⓔⓢ Ⓞⓝⓛⓨ🎉" )
-      elif score == 14:
-        print("You have a pretty average anime count, eh?")
-        print("📲Weeb Level- (っ◔◡◔)っ ♥ KEEᑭ ᗯᗩTᑕᕼIᑎG ♥📲")
-      elif score == 15:
-        print("Not bad...")
-        print("Weeb Level- 😌𝐼𝓂𝓅𝓇♡𝓋𝑒𝒹 😌 \n")
-      elif score == 16:
-        print("You're pretty well watched, aren't you?")
-        print("Weeb Level- 😁𝒮𝑒𝒶𝓈💮𝓃𝑒𝒹 𝒜𝓃𝒾𝓂𝑒 𝒲𝒶𝓉𝒸𝒽𝑒𝓇😁 \n")
-      elif score == 17:
-        print("Well, you're pretty close- watch a couple more and you'll nail it!")
-        print("Weeb Level- 🥺丂乇几卩卂丨🥺 \n")
-      elif score == 18:
-        print("Ooh... two away... you're very close!")
-        print("Weeb Level- 😤卂ⒹⒹ𝐈ĆⓉＥ𝔡 😤 \n")
-      elif score == 19:
-        print("LMAO YOU GOT ONE OFF- ASIAN MOTHER WHIP YOU FOR ONLY 95%")
+     
+      if score == 4:
+        print("LMAO YOU GOT ONE OFF- ASIAN MOTHER WHIP YOU FOR ONLY 80%")
         print("Weeb Level- 🏮[̲̅L][̲̅o][̲̅w] [̲̅L][̲̅e][̲̅v][̲̅e][̲̅l] [̲̅A][̲̅s][̲̅i][̲̅a][̲̅n]🏮 \n")
-      else:
+      elif score == 5:
         print("How is this possible??? *Special Reward Unlocked!!*")
         print("Weeb Level- 😈😳😨🤩 S♥E♥N♥P♥A♥I♥ ♥O♥T♥A♥K♥U🤩😨😳😈")
         print("✨Special Reward✨ - https://www.youtube.com/watch?v=xvFZjo5PgG0 \n")    
     print("Game Over, press stop to stop the programme and press run to re-try.")
 
+  #This closes the database.
   db.close()
+#this calls the main function.
 main()
 
 
