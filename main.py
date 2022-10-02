@@ -2,7 +2,7 @@ from sys import exit
 import click,time
 import sqlite3
 
-DATABASE = "quizquestionsoriginal.db"
+DATABASE = "adminmodetesting.db"
 
 #prints a loading screen
 def loading():
@@ -74,6 +74,7 @@ def print_questions():
   cursor.execute(sql)
   results = cursor.fetchall()
   return results
+  print(results)
   db.close()
 
 #This is working
@@ -86,21 +87,30 @@ def delete_questions(QID):
   db.close()
 
 #This is working
-def add_questions(question, correctanswer, option1, option2, option3, option4):
+def add_questions(question, correctanswer, option1, option2, option3, option4, difficulty):
   db = sqlite3.connect(DATABASE)
   cursor = db.cursor()
-  sql = "INSERT INTO questions (question, correctanswer, option1, option2, option3, option4) VALUES (?, ?, ?, ?, ?, ?)"
-  cursor.execute(sql, (question, correctanswer, option1, option2, option3, option4))
+  sql = "INSERT INTO questions (question, correctanswer, option1, option2, option3, option4, difficulty) VALUES (?, ?, ?, ?, ?, ?, ?)"
+  cursor.execute(sql, (question, correctanswer, option1, option2, option3, option4, difficulty))
   db.commit()
   db.close()
 
 #This will likely work when you set it up
-def update_questions(question, correctanswer, option1, option2, option3, option4, QID):
+def update_questions(question, correctanswer, option1, option2, option3, option4, difficulty, QID):
   db = sqlite3.connect(DATABASE)
   cursor = db.cursor()
-  sql = "UPDATE questions SET question = ?, correctanswer, = ?, option1 = ?, option2 = ?, option3 = ?, option4 = ? WHERE QID = ?"
-  cursor.execute(sql, (question, correctanswer, option1, option2, option3, option4, QID))
+  sql = "UPDATE questions SET question = ?, correctanswer = ?, option1 = ?, option2 = ?, option3 = ?, option4 = ?, difficulty = ?, WHERE QID = ?"
+  cursor.execute(sql,(question, correctanswer, option1, option2, option3, option4, difficulty, QID,))
   db.commit()
+  db.close()
+
+def loop_count(level):
+  db = sqlite3.connect(DATABASE)
+  cursor = db.cursor()
+  sql = "SELECT COUNT(*) FROM questions WHERE difficulty = ?"
+  cursor.execute(sql,(level))
+  count = cursor.fetchall()
+  return count
   db.close()
 
 def admin_mode():
@@ -111,7 +121,7 @@ def admin_mode():
     if password == ("lachlanisasimp"):
       print("Admin Mode has been unlocked.")
       time.sleep(1)
-      #So you don't get the error message, I would loop this set of code - while admin_choices != 4
+     
      
       print("What would you like to do today?")
       admin_choices = int(input("1. Delete Questions \n2. Add Questions \n3. Update Questions \n4. Print Questions \n5. Exit Admin Mode \n"))
@@ -127,15 +137,23 @@ def admin_mode():
           correctanswer = input("What is the correct answer for your question?")
           option1 = input("What is your first answer option?")
           option2 = input("What is your second answer option?")
-          option3 = input("what is your third answer option?")
+          option3 = input("What is your third answer option?")
           option4 = input("What is your last answer option?")
-          add_questions(question, correctanswer, option1, option2, option3, option4)
+          difficulty = input("What is question's difficulty rating? \n e- Easy\n m- Medium\n h- Hard\n ex- Extreme\n")
+          add_questions(question, correctanswer, option1, option2, option3, option4, difficulty)
           #This was testing that the database was being changed - it is
-          results = print_questions()
-          for result in results:
-            print(result)
+          
         elif admin_choices == 3:
           print("You are now going to: Update Questions")
+          question = input("What is the question you would like to update?")
+          correctanswer = input("What is the correct answer for your question?")
+          option1 = input("What is your first answer option?")
+          option2 = input("What is your second answer option?")
+          option3 = input("what is your third answer option?")
+          option4 = input("What is your last answer option?")
+          difficulty = input("What is your question's difficulty rating? \n e- Easy\n m- Medium\n h- Hard\n ex- Extreme\n")
+          QID = int(input("What is the QID of your question?"))
+          update_questions(question, correctanswer, option1, option2, option3, option4, difficulty, QID)
         elif admin_choices == 4: 
           print_questions()
         elif admin_choices == 5:
@@ -143,7 +161,7 @@ def admin_mode():
           return "yes"
         else:
           print("There are only 5 choices, please select from 1 to 5.")
-        admin_choices = int(input("1. Delete Questions \n2. Add Questions \n3. Update Questions \n5. Exit Admin Mode \n"))
+        admin_choices = int(input("1. Delete Questions \n2. Add Questions \n3. Update Questions \n4. Print Questions \n5. Exit Admin Mode \n"))
         
    
 #When you are back on your laptop, I would recommend including a file that is the original 20 questions as a db file - name it something like dbsetup.db
@@ -155,18 +173,19 @@ def main():
   #loading()
   db = sqlite3.connect(DATABASE)
   cursor = db.cursor()
-  sql = "SELECT * FROM questions;"
-  cursor.execute(sql)
-  results = cursor.fetchall()
+ 
+  
  
     #This sets the variable 'score' to 0 to begin- this variable keeps track of your score.
   score = 0
   #This sets the variable 'lives' to 10 to begin- this variable keeps track of your lives
-  lives = 10
+  lives = 3
   #This sets the variable 'loopamt' to 0 to begin- this variable keeps track of the amount of times it has looped through.
   loopamt = 0
    #This prints out the welcome message and the user instructions.  
-  print("Konichiwa, welcome to an anime themed quiz ~UwU~ \nIf you get 10/20 questions wrong, you fail the quiz. If you get over 10 questions right, you pass the quiz. \nIf you get all 20 questions right, there is a special reward!!! (Being vored by Raul the Fat Hispanic) \nTo answer each question, please input the letter (a, b, c, d) associated with the answer you have selected.")
+  print("Konichiwa, welcome to an anime themed quiz ~UwU~ \nIf you get 3 questions wrong, you fail the quiz. If not, you pass the quiz. \nIf you get all the questions right, there is a special reward!!! (Being vored by Raul the Fat Hispanic) \nTo answer each question, please input the letter (a, b, c, d) associated with the answer you have selected.")
+
+  
     #Variable 'begin' equals the user input answer to the printed question.
     
     
@@ -179,19 +198,44 @@ def main():
       begin = admin_mode()
     else:
       begin = input("There was an error. Rebooting...\nDo you wish to play this quiz? Please answer with either 'yes' or 'no'. ")
+  level = input("What level would you like to play at?\n 1. Easy\n 2. Medium\n 3. Hard\n 4. Extreme\n")
+  if level == "1":
+    sql = "SELECT * FROM questions WHERE difficulty = 'e';"
+    cursor.execute(sql)
+    results = cursor.fetchall()
+  if level == "2":
+    sql = "SELECT * FROM questions WHERE difficulty = 'm';"
+    cursor.execute(sql)
+    results = cursor.fetchall()
+  if level == "3":
+    sql = "SELECT * FROM questions WHERE difficulty = 'h';"
+    cursor.execute(sql)
+    results = cursor.fetchall()
+  if level == "4": 
+    sql = "SELECT * FROM questions WHERE difficulty = 'ex';"
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    
+  loop_count(level)
+  print(loop_count(level))
+  
+
+  
+  
+  
+  
+
   
    
       
       
-  #This if statement defines what happens when the user inputs 'no' begin.lower() == "no":
-  
-  #This if statement defines what happens when the user inputs 'yes'.
+ 
   
   print("Hai, let's begin!!")
   time.sleep(2)
   click.clear()
   while lives >= 0:
-    if loopamt >= 20:
+    if loopamt >= 5:
       break
     elif lives <= 0:
       break
@@ -211,7 +255,7 @@ def main():
           print("The correct answer is", answer)
          #This adds one to variable loopamt 
           loopamt = loopamt + 1
-          print("You have", 20 - loopamt, "questions to go!")
+          print("You have", 5 - loopamt, "questions to go!")
           time.sleep(2)
           click.clear()
           
@@ -246,8 +290,7 @@ def main():
       print("Congradulations on passing the quiz!!!")
       #Since there are 20 questions
       print("Your correct answer percentage is", score*5,"%")
-      #This prints the answer key.
-      print("The answer key is... \n 1)b.Tanjiro Kamado \n 2)a.Nine Tails \n 3)d.Mind Reading \n 4)b.Buggy \n 5)c.Kurapika \n 6)b.Nekoma \n 7)b.Shingou Shoji \n 8)a.Black Flash \n 9)a.Ikumi Mito \n 10)b.Season 2 \n 11)c.Pewter Gym \n 12)c.Endeavour \n 13)c.Kaede Kayano \n 14)a.Leafa \n 15)b.200 \n 16)d.Yin \n 17)b.Midfielder \n 18)d.016 \n 19)a.Time \n 20)c.Mars")
+      
       #These print a short message and a 'Weeb Level' based on your score.
       if score == 11:
         print("Phew, you just passed the quiz.")
